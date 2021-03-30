@@ -1,7 +1,11 @@
 import numpy as np
 import random
 
+from numpy.core.defchararray import add
+
 def main():
+
+    np.set_printoptions(precision=4)
 
     testBoard = np.zeros((3,3))
 
@@ -50,6 +54,9 @@ def main():
 
         print()
         print(testBoard)
+        adding = np.sum(testBoard)
+        print()
+        print("Adds to: ", adding)
     
     #print()
 
@@ -63,22 +70,28 @@ def main():
     else:
 
         supposeTrue = testBoard[searching3] * 0.3
+        supposeTruer = ((1 - testBoard[searching3]) + supposeTrue)
+        
         testBoard[searching3] = (supposeTrue) / ((1 - testBoard[searching3]) + supposeTrue)
         
         #print()
         #print(testBoard)
 
         visiting.remove(searching3)
-        #print(observedList)
+        #print()
+        #print(testBoard)
+        ##print(observedList)
         for i in range(len(observedList)):
             #supposeTrue = testBoard[observedList[i]] * 0.3
-            testBoard[observedList[i]] = supposeTrue / ((1 - testBoard[observedList[i]]) + supposeTrue)
+            testBoard[observedList[i]] = testBoard[observedList[i]] / supposeTruer
 
         observedList.append(searching3)
 
         observedCount += 1
 
         #print(visiting)
+
+        visitingLen = len(visiting)
 
         for i in range (3):
             for j in range(3):
@@ -87,7 +100,10 @@ def main():
 
         print()
         print(testBoard)
-
+        adding = np.sum(testBoard)
+        print()
+        #print(adding)
+        print("Adds to: ", adding)
     return
 
 
