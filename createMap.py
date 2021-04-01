@@ -43,3 +43,9 @@ def makeTerrain(terrainMap):
 
 
     return terrainMap
+
+
+def shortestDistance(matrix):
+
+
+    return
