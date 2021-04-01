@@ -15,16 +15,16 @@ def printBoard(board):
         print(str(i).zfill(len(str(n))) + "|", end='')
         for j in range(len(board)):
             current = str(board[i,j])
-            if (current) == 'f':
+            if (current) == 'F':
                 row += brightgreen(current) + "  "
-            elif (current) == 'F':
+            elif (current) == 'f':
                 row += brightyellow(current) + "  "
             elif (current) == 'H':
                 row += brightred(current) + "  "
             elif (current) == 'C':
                 row += brightcyan(current) + "  "
             else:
-                row = current + "  "
+                row += current + "  "
 
         print(row)
     print()

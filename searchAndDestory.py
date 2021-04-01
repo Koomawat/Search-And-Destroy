@@ -15,7 +15,7 @@ def main():
     print()
     print("Target at location: ", targetLocation)
     print("Terrain type: ", mapGrid[targetLocation])
-
+    print(mapGrid)
     print()
     printBoard(mapGrid)
 

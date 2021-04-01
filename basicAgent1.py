@@ -1,3 +1,4 @@
+import random
 
 def calculateBelief(matrix, beliefState, targetLocation):
 
@@ -59,3 +60,8 @@ def calculateBelief(matrix, beliefState, targetLocation):
     return agentsBoard
 
 
+def falseNegativeCheck():
+
+    number = random.uniform(0,1)
+
+    return number

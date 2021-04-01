@@ -33,7 +33,7 @@ def makeTerrain(terrainMap):
 
             # 'F' designates Forest
 
-            elif (terrianType == "Forest"):
+            elif (terrianType == "Forested"):
                 terrainMap[i,j] = 'F'
 
             # 'C' designates Caves
@@ -42,8 +42,8 @@ def makeTerrain(terrainMap):
                 terrainMap[i,j] = 'C'
 
     lenTerrain = len(terrainMap)
-    randX = random.randint(0,lenTerrain)
-    randY = random.randint(0,lenTerrain)
+    randX = random.randint(0,lenTerrain-1)
+    randY = random.randint(0,lenTerrain-1)
     targetLocation = (randX, randY)
 
     return terrainMap, targetLocation
