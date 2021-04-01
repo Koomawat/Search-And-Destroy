@@ -1,5 +1,5 @@
 
-def calculateBelief(matrix):
+def calculateBelief(matrix, beliefState, targetLocation):
 
     # Belief of a cell 
 
@@ -35,13 +35,27 @@ def calculateBelief(matrix):
     targetFound = False
 
 
-    while targetFound == False:
+    agentsBoard = matrix
 
-        
-        
 
-        return
+    boardDim = len(beliefState)
 
-    return
+
+    for i in range(boardDim):
+        for j in range(boardDim):
+            agentsBoard[i,j] = 1 / boardDim
+            unvisited.append((i,j))
+
+
+    #while targetFound == False:
+
+        # (P(Cell x = T) P(Cell y = F | Cell x = T))
+
+        #beliefXY = 0
+
+
+        #return
+
+    return agentsBoard
 
 

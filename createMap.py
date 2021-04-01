@@ -16,8 +16,8 @@ def makeTerrain(terrainMap):
 
     # Randomly setting a cell to a terrain type with each terrain having 1/4 chance
 
-    for i in range(50):
-        for j in range(50):
+    for i in range(len(terrainMap)):
+        for j in range(len(terrainMap)):
 
             terrianType = random.choice(terrainChoices)
 
@@ -41,11 +41,14 @@ def makeTerrain(terrainMap):
             else:
                 terrainMap[i,j] = 'C'
 
+    lenTerrain = len(terrainMap)
+    randX = random.randint(0,lenTerrain)
+    randY = random.randint(0,lenTerrain)
+    targetLocation = (randX, randY)
 
-    return terrainMap
+    return terrainMap, targetLocation
 
 
-def shortestDistance(matrix):
-
+def shortestDistance(matrix, start, goal):
 
     return

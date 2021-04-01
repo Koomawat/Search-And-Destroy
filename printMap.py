@@ -23,6 +23,8 @@ def printBoard(board):
                 row += brightred(current) + "  "
             elif (current) == 'C':
                 row += brightcyan(current) + "  "
+            else:
+                row = current + "  "
 
         print(row)
     print()
