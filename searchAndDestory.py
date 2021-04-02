@@ -9,7 +9,7 @@ def main():
 
     np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
 
-    mapGrid = board(10)
+    mapGrid = board(3)
 
     mapGrid, targetLocation = makeTerrain(mapGrid)
     print()
@@ -18,13 +18,13 @@ def main():
     print()
     printBoard(mapGrid)
 
-    agent1BeliefState = board(10)
+    agent1BeliefState = board(3)
     agent2BeliefState = board(50)
     improvedAgentBeliefState = board(50)
 
     answer = calculateBelief(mapGrid, agent1BeliefState, targetLocation)
 
-    print(answer)
+    #print(answer)
 
     return
 
