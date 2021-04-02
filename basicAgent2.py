@@ -29,8 +29,6 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
     # Unvisited list to keep track of which spots on the map are searching candidates
     tuples = []
 
-    # Observed list to keep track of which cells of the map have been searched
-    observed = []
 
     # Counter to keep track of total distance agent travels
     totalDistance = 0
@@ -59,7 +57,6 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
     
 
     while targetFound == False:
-
 
         previousBeliefs = belief
 
@@ -105,31 +102,30 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
 
         belief[searching] = (belief[searching] * (1 - falseNegative))
 
-        observed.append(searching)
 
+
+        beliefSum = np.sum(belief)
+        belief = belief / beliefSum
 
         for i in range (boardDim):
             for j in range(boardDim):
-                if (i,j) not in observed:
-                    beliefNumerator = previousBeliefs[(i,j)]
+                    
+                if currentTerrain == "f":
+                    falseNegative = 0.1
+                elif currentTerrain == "H":
+                    falseNegative = 0.3
+                elif currentTerrain == "F":
+                    falseNegative = 0.7
+                elif currentTerrain == "C":
+                    falseNegative = 0.9
 
-                    belief[(i,j)] = beliefNumerator / observingBeliefDenominator
+                belief[(i,j)] = (belief[(i,j)] * (1 - falseNegative))
 
-                    currentTerrain = str(agentsBoard[(i,j)])
+        beliefSum = np.sum(belief)
+        #print(beliefSum)
 
-                    if currentTerrain == "f":
-                        falseNegative = 0.1
-                    elif currentTerrain == "H":
-                        falseNegative = 0.3
-                    elif currentTerrain == "F":
-                        falseNegative = 0.7
-                    elif currentTerrain == "C":
-                        falseNegative = 0.9
-
-                    belief[(i,j)] = (belief[(i,j)] * (1 - falseNegative))
-
-
-        observed = []
+        belief = belief / beliefSum
+        #print(belief)
 
         maxList = largestProbabilities(belief)
 
@@ -153,7 +149,6 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
             searching = uniqueList[0]
         else:
             searching = random.choice(uniqueList)
-
 
 
 

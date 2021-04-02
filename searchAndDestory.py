@@ -9,7 +9,7 @@ def main():
 
     np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
 
-    mapGrid = board(5)
+    mapGrid = board(20)
 
     mapGrid, targetLocation = makeTerrain(mapGrid)
     print()
@@ -18,20 +18,20 @@ def main():
     print()
     #printBoard(mapGrid)
 
-    agent1BeliefState = board(10)
-    agent2BeliefState = agentBoard(5)
+    agent1BeliefState = board(20)
+    agent2BeliefState = agentBoard(20)
     improvedAgentBeliefState = board(50)
 
-    #agent1searches, agent1distance = calculateContainingBelief(mapGrid, agent1BeliefState, targetLocation)
+    agent1searches, agent1distance = calculateContainingBelief(mapGrid, agent1BeliefState, targetLocation)
     agent2searches, agent2distance = calculateFindingBelief(mapGrid, agent2BeliefState, targetLocation)
 
-    #print("Agent 1 Distance: ", agent1distance)
-    #print("Agent 1 Searches: ", agent1searches)
+    print("Agent 1 Distance: ", agent1distance)
+    print("Agent 1 Searches: ", agent1searches)
 
-    #agent1total = agent1searches + agent1distance
-    #print("Agent 1 Total =", agent1total)
+    agent1total = agent1searches + agent1distance
+    print("Agent 1 Total =", agent1total)
 
-    #print()
+    print()
 
     print("Agent 2 Distance: ", agent2distance)
     print("Agent 2 Searches: ", agent2searches)

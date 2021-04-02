@@ -26,8 +26,6 @@ def calculateContainingBelief(matrix, beliefState, targetLocation):
     # Unvisited list to keep track of which spots on the map are searching candidates
     tuples = []
 
-    # Observed list to keep track of which cells of the map have been searched
-    observed = []
 
     # Counter to keep track of total distance agent travels
     totalDistance = 0
@@ -56,7 +54,6 @@ def calculateContainingBelief(matrix, beliefState, targetLocation):
     
     while targetFound == False:
 
-        
         #print("Searching at: ", searching)
 
         previousBeliefs = belief
@@ -102,23 +99,17 @@ def calculateContainingBelief(matrix, beliefState, targetLocation):
         belief[searching] = observingBeliefNumerator / observingBeliefDenominator
         #print("Belief: ", belief)
 
-        observed.append(searching)
+
         #print(observed)
 
-        for i in range (boardDim):
-            for j in range(boardDim):
-                if (i,j) not in observed:
-                    beliefNumerator = previousBeliefs[(i,j)]
-                    #print(beliefNumerator)
-                    #print(beliefDenominator)
-                    belief[(i,j)] = beliefNumerator / observingBeliefDenominator
+        beliefSum = np.sum(belief)
+        belief = belief / beliefSum
 
         #print(np.sum(belief))
 
         #print("Current belief: ")
         #print(belief)
 
-        observed = []
         #searching = random.choice(tuples)
 
         maxList = largestProbabilities(belief)

@@ -15,12 +15,19 @@ def main():
 
     for i in range(3):
         for j in range(3):
-            testBoard[i,j] = 1/2
+            testBoard[i,j] = 1/9
             visiting.append((i,j))
 
-    testBoard = testBoard * 10000
+    testBoard[0,0] = testBoard[0,0] * 0.3
 
     print(testBoard)
+
+    sumA = np.sum(testBoard)
+    print(sumA)
+
+    testBoard2 = testBoard / sumA
+
+    print(testBoard2)
 
     return
 
