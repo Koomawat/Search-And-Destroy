@@ -7,6 +7,12 @@ def board(dim):
 
     return gameboard
 
+def agentBoard(dim):
+
+    gameboard = np.zeros(shape=(dim,dim), dtype=np.float64)
+
+    return gameboard
+
 
 def makeTerrain(terrainMap):
 

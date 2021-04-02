@@ -3,11 +3,9 @@ import random
 import numpy as np
 import math
 
-def calculateBelief(matrix, beliefState, targetLocation):
+def calculateContainingBelief(matrix, beliefState, targetLocation):
 
-    
-
-    # Belief of a cell 
+    # Belief of a cell -> P(Belief)
 
     # T = potentially has target
     # F = false observation
@@ -56,11 +54,10 @@ def calculateBelief(matrix, beliefState, targetLocation):
     searching = random.choice(tuples)
     tuples.remove(searching)
     
-    #while targetFound == False:
-    for i in range(3):
-    #if 1 == 1:
+    while targetFound == False:
 
-        print("Searching at: ", searching)
+        
+        #print("Searching at: ", searching)
 
         previousBeliefs = belief
 
@@ -69,24 +66,29 @@ def calculateBelief(matrix, beliefState, targetLocation):
 
         falseNegative = 0
 
-
         if currentTerrain == "f":
             falseNegative = 0.1
         elif currentTerrain == "H":
             falseNegative = 0.3
+        elif currentTerrain == "F":
+            falseNegative = 0.7
         elif currentTerrain == "C":
             falseNegative = 0.9
-        else:
-            falseNegative = 0.7
 
 
         if searching == targetLocation:
-
+            
             num = falseNegativeCheck()
 
-            if num > falseNegative:
-                print("Target Found!")
-                return agentsBoard
+            observedCount += 1
+
+            if num >= falseNegative:
+                targetFound = True
+                #print("Target Found!")
+                return observedCount, totalDistance
+        else:
+
+            observedCount += 1
         
 
         #(P(Cell x = T) P(Cell y = F | Cell x = T))
@@ -113,8 +115,8 @@ def calculateBelief(matrix, beliefState, targetLocation):
 
         #print(np.sum(belief))
 
-        print("Current belief: ")
-        print(belief)
+        #print("Current belief: ")
+        #print(belief)
 
         observed = []
         #searching = random.choice(tuples)
@@ -127,14 +129,11 @@ def calculateBelief(matrix, beliefState, targetLocation):
             if i not in uniqueTargets:
                 uniqueTargets.append(i)
 
-        print("Max list: ", uniqueTargets)    
+        #print("Max list: ", uniqueTargets)    
 
         nextTarget, distanceCost = minManhattanDistance(uniqueTargets, searching)
 
-        if len(nextTarget) == 1:
-            searching = nextTarget[0]
-        else:
-            searching = random.choice(nextTarget)
+        totalDistance += distanceCost
 
         uniqueList = []
 
@@ -142,13 +141,25 @@ def calculateBelief(matrix, beliefState, targetLocation):
             if i not in uniqueList:
                 uniqueList.append(i)
 
-        print("Next possible: ", uniqueList)
-        print()
+        if len(nextTarget) == 1:
+            searching = uniqueList[0]
+        else:
+            searching = random.choice(uniqueList)
+
+        
+
+        #print("Next possible: ", uniqueList)
+        #print()
         #print(distanceCost)
+
+        #print(belief)
 
         #return
 
-    return belief
+    return observedCount, totalDistance
+
+
+
 
 
 def falseNegativeCheck():
@@ -182,7 +193,7 @@ def largestProbabilities(belief):
 
 def minManhattanDistance(tuples, current):
 
-    print(current)
+    #print(current)
 
     currX = current[0]
     currY = current[1]
