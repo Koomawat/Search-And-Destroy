@@ -1,5 +1,6 @@
 from more_termcolor.colors import brightred, brightgreen, brightyellow, brightblue, brightmagenta, brightcyan
 
+# Print map function for the matrices
 def printBoard(board):
 
     n = len(board)

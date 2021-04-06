@@ -1,6 +1,6 @@
 from basicAgent1 import *
 from basicAgent2 import *
-from createMap import *
+from mapFunctions import *
 from improvedAgent import *
 from printMap import *
 import sys
@@ -9,7 +9,7 @@ def main():
 
     np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
 
-    mapGrid = board(20)
+    mapGrid = board(50)
 
     mapGrid, targetLocation = makeTerrain(mapGrid)
     print()
@@ -18,10 +18,11 @@ def main():
     print()
     #printBoard(mapGrid)
 
-    agent1BeliefState = board(20)
-    agent2BeliefState = agentBoard(20)
+    agent1BeliefState = agentBoard(50)
+    agent2BeliefState = agentBoard(50)
     improvedAgentBeliefState = board(50)
 
+    # Basic Agent 1/2 searches
     agent1searches, agent1distance = calculateContainingBelief(mapGrid, agent1BeliefState, targetLocation)
     agent2searches, agent2distance = calculateFindingBelief(mapGrid, agent2BeliefState, targetLocation)
 

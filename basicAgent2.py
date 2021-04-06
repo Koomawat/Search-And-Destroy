@@ -1,7 +1,6 @@
-from createMap import board
+from mapFunctions import *
 import random
 import numpy as np
-import math
 
 def calculateFindingBelief(matrix, beliefState, targetLocation):
 
@@ -29,7 +28,6 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
     # Unvisited list to keep track of which spots on the map are searching candidates
     tuples = []
 
-
     # Counter to keep track of total distance agent travels
     totalDistance = 0
 
@@ -39,13 +37,12 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
     # Target found boolean so we keep iterating until the target is found
     targetFound = False
 
-
     agentsBoard = matrix
     belief = beliefState
 
     boardDim = len(beliefState)
 
-
+    # Calculating initial belief state of agent where each cell has an equal probability
     for i in range(boardDim):
         for j in range(boardDim):
             belief[i,j] = float(1 / (boardDim * boardDim))
@@ -53,17 +50,18 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
 
     # Initial cell agent will search
     searching = random.choice(tuples)
-    tuples.remove(searching)
     
-
+    # Keeping iterating until the target is found and returned
     while targetFound == False:
 
+        # Keeping track of previous belief, used for updating later
         previousBeliefs = belief
 
         currentTerrain = str(agentsBoard[searching])
 
         falseNegative = 0
 
+        # False negative values of terrains
         if currentTerrain == "f":
             falseNegative = 0.1
         elif currentTerrain == "H":
@@ -73,7 +71,8 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
         elif currentTerrain == "C":
             falseNegative = 0.9
 
-
+        # If current location is where the target is: do a false negative check
+        # Random number from 0 to 1 is generated, if it is greater than the terrain type's false negative that means the target has been found
         if searching == targetLocation:
             
             num = falseNegativeCheck()
@@ -92,21 +91,20 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
         #(P(Cell x = T) P(Cell y = F | Cell x = T))
         observingBeliefNumerator = previousBeliefs[searching] * falseNegative
 
-
         #(P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T))
         observingBeliefDenominator = (1 - previousBeliefs[searching]) + observingBeliefNumerator
 
-
+        # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T))
         belief[searching] = observingBeliefNumerator / observingBeliefDenominator
 
-
+        # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T)) (P(Not false negative))
         belief[searching] = (belief[searching] * (1 - falseNegative))
 
-
-
+        # Normalizing the rest of the belief state
         beliefSum = np.sum(belief)
         belief = belief / beliefSum
 
+        # Iterating every cell in the belief state and accounting for the false negatives of the terrain
         for i in range (boardDim):
             for j in range(boardDim):
                     
@@ -121,20 +119,22 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
 
                 belief[(i,j)] = (belief[(i,j)] * (1 - falseNegative))
 
+
+        # Normalizing the rest of the belief state again 
         beliefSum = np.sum(belief)
-        #print(beliefSum)
-
         belief = belief / beliefSum
-        #print(belief)
 
+        # Finding the tuples of the largest probabilities 
         maxList = largestProbabilities(belief)
 
         uniqueTargets = []
 
+        # Removing duplicates in max probability list
         for i in maxList:
             if i not in uniqueTargets:
                 uniqueTargets.append(i)
 
+        # Seeking the next target to search and calculating the cost to do so
         nextTarget, distanceCost = minManhattanDistance(uniqueTargets, searching)
 
         totalDistance += distanceCost
@@ -145,81 +145,13 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
             if i not in uniqueList:
                 uniqueList.append(i)
 
+        # Setting the new search tuple to continue iterating
         if len(nextTarget) == 1:
             searching = uniqueList[0]
         else:
             searching = random.choice(uniqueList)
 
 
-
     return observedCount, totalDistance
 
 
-def falseNegativeCheck():
-
-    number = random.uniform(0,1)
-
-    return number
-
-
-def largestProbabilities(belief):
-
-    
-    maxList = []
-
-    maxVal = belief[0,0]
-    maxList.append((0,0))
-
-    for i in range(len(belief)):
-        for j in range(len(belief)):
-
-            curr = belief[i,j]
-            if curr == maxVal:
-                maxList.append((i,j))
-            elif curr > maxVal:
-                maxVal = belief[i,j]
-                maxList = []
-                maxList.append((i,j))
-
-    return maxList
-
-
-def minManhattanDistance(tuples, current):
-
-    #print(current)
-
-    currX = current[0]
-    currY = current[1]
-    
-    nextSearchTarget = tuples[0]
-
-    currMinX = nextSearchTarget[0]
-    currMinY = nextSearchTarget[1]
-
-    currMin = abs(currMinX - currX) + abs(currMinY - currY)
-
-    tuples.remove((tuples[0]))
-
-    goalList = []
-    goalList.append((currMinX, currMinY))
-
-    lenTuples = len(tuples)
-
-    for i in range(lenTuples):
-
-        tempX = tuples[i][0]
-        tempY = tuples[i][1]
-
-        tempMin = abs(tempX - currX) + abs(tempY - currY)
-
-        #print(tempMin)
-        if tempMin == currMin:
-            goalList.append((tempX, tempY))
-
-        elif tempMin < currMin:
-            currMin = tempMin
-            goalList = []
-            goalList.append((tempX, tempY))
-            #print("New goals: ", goalList)
-
-    return goalList, currMin
