@@ -74,19 +74,17 @@ def calculateImprovedBelief(matrix, beliefState, targetLocation):
             
             num = falseNegativeCheck()
 
-            for i in range(10):
-                observedCount += 1
+            observedCount += 1
 
-                if num >= falseNegative:
-                        
-                    targetFound = True
-                    return observedCount, totalDistance
+            if num >= falseNegative:
+                targetFound = True
+                return observedCount, totalDistance
 
         else:
 
-            observedCount += 10
-        
+            observedCount += 1
 
+            
         # (P(Cell x = T) P(Cell y = F | Cell x = T))
         observingBeliefNumerator = previousBeliefs[searching] * falseNegative
 
@@ -142,17 +140,16 @@ def calculateImprovedBelief(matrix, beliefState, targetLocation):
             
                 num = falseNegativeCheck()
                 
-                for i in range(10):
-                    observedCount += 1
+                observedCount += 1
 
-                    if num >= falseNegative:
+                if num >= falseNegative:
                         
-                        targetFound = True
-                        return observedCount, totalDistance
+                    targetFound = True
+                    return observedCount, totalDistance
                 
             else:
 
-                observedCount += 10
+                observedCount += 1
 
         
 
