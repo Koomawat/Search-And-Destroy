@@ -151,6 +151,8 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
         else:
             searching = random.choice(uniqueList)
 
+        
+
 
     return observedCount, totalDistance
 
