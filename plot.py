@@ -47,7 +47,7 @@ def both():
             agent1searches, agent1distance = calculateContainingBelief(mapGrid, beliefState, targetLocation, initialLocation)
             agent2searches, agent2distance = calculateFindingBelief(mapGrid, beliefState, targetLocation, initialLocation)
             improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            
+
             # Get score
             agent1total = agent1searches + agent1distance
             agent2total = agent2searches + agent2distance
@@ -78,8 +78,8 @@ def both():
         avg_list.append(avgPerMap)
 
     # Subplots for different graphs
-    fig, (ax1, ax2) = plt.subplot(1, 2)
-    fig.subtitle('Performance of Agents')
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Performance of Agents')
 
     ###############################################################
     ####### Plot 1 ################################################
@@ -91,23 +91,23 @@ def both():
     ax1.plot(xax, overallAvg, label = "Total")
 
     # Axis labeling and other plot display features
-    ax1.xlabel('Agent Type')
-    ax1.ylabel('Score')
-    ax1.title(f"Performance Based On Agent Type\nMap dimension: {dim} x {dim}")
+    ax1.set_xlabel('Agent Type')
+    ax1.set_ylabel('Score')
+    ax1.set_title(f"Overall Performance Per Agent\nMap dimension: {dim} x {dim}")
     ax1.legend(loc = "upper right")
 
     ###############################################################
     ####### Plot 2 ################################################
     ###############################################################
 
-    xax = ["Map"+str(k) for k in range(11)]
+    xax = ["M"+str(k) for k in range(11)]
     ax2.plot(xax, agent1_avg_list, label = "Agent 1")
     ax2.plot(xax, agent2_avg_list, label = "Agent 2")
     ax2.plot(xax, improved_avg_list, label = "Improved Agent")
     # Axis labeling and other plot display features
-    ax2.xlabel('Agent Type')
-    ax2.ylabel('Score')
-    ax2.title(f"Performance Based On Agent Type\nMap dimension: {dim} x {dim}")
+    ax2.set_xlabel('Map List')
+    ax2.set_ylabel('Score')
+    ax2.set_title(f"Performance of Agents Per Map\nMap dimension: {dim} x {dim}")
     ax2.legend(loc = "upper right")
 
 
