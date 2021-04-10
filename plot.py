@@ -13,6 +13,7 @@ def both():
     dim = int(input("Enter the dimension of the map: "))
 
     # Empty lists for later to append on averages for each map traversed by different agents
+    mapType_list = []
     avg_list = []
     agent1_avg_list, agent2_avg_list, improved_avg_list = [], [], []
 
@@ -172,7 +173,7 @@ def plot2():
         print(i)
 
     # x-axis labels
-    xax = ["Map"+str(k) for k in range(11)]
+    xax = ["M"+str(k) for k in range(11)]
 
     # Different lines per agent
     plt.plot(xax, agent1_avg_list, label = "Agent 1")
@@ -180,9 +181,9 @@ def plot2():
     plt.plot(xax, improved_avg_list, label = "Improved Agent")
 
     # Axis labeling and other plot display features
-    plt.xlabel('Agent Type')
+    plt.xlabel('Map List')
     plt.ylabel('Score')
-    plt.title(f"Performance Based On Agent Type\nMap dimension: {dim} x {dim}")
+    plt.title(f"Performance of Agents Per Map\nMap dimension: {dim} x {dim}")
     plt.legend(loc = "upper right")
     plt.show()
 
