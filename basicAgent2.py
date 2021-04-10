@@ -98,13 +98,6 @@ def calculateFindingBelief(matrix, beliefState, targetLocation, initialLocation)
         # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T))
         belief[searching] = observingBeliefNumerator / observingBeliefDenominator
 
-        # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T)) (P(Not false negative))
-        belief[searching] = (belief[searching] * (1 - falseNegative))
-
-        # Normalizing the rest of the belief state
-        beliefSum = np.sum(belief)
-        belief = belief / beliefSum
-
         # Iterating every cell in the belief state and accounting for the false negatives of the terrain
         for i in range (boardDim):
             for j in range(boardDim):
