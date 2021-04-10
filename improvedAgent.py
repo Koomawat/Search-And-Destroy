@@ -2,7 +2,7 @@ from mapFunctions import *
 import random
 import numpy as np
 
-def calculateImprovedBelief(matrix, beliefState, targetLocation):
+def calculateImprovedBelief(matrix, beliefState, targetLocation, initialLocation):
 
     # Belief of a cell -> P(Belief)
 
@@ -22,8 +22,8 @@ def calculateImprovedBelief(matrix, beliefState, targetLocation):
     # P(Cell y = F | Cell x = T) represents the false negative rate of the given terrain
 
 
-    # Unvisited list to keep track of which spots on the map are searching candidates
-    tuples = []
+    # # Unvisited list to keep track of which spots on the map are searching candidates
+    # tuples = []
 
     # Counter to keep track of total distance agent travels
     totalDistance = 0
@@ -37,16 +37,17 @@ def calculateImprovedBelief(matrix, beliefState, targetLocation):
     agentsBoard = matrix
     belief = beliefState
 
-    boardDim = len(beliefState)
+    # boardDim = len(beliefState)
 
-    # Calculating initial belief state of agent where each cell has an equal probability
-    for i in range(boardDim):
-        for j in range(boardDim):
-            belief[i,j] = float(1 / (boardDim * boardDim))
-            tuples.append((i,j))
+    # # Calculating initial belief state of agent where each cell has an equal probability
+    # for i in range(boardDim):
+    #     for j in range(boardDim):
+    #         belief[i,j] = float(1 / (boardDim * boardDim))
+    #         tuples.append((i,j))
 
-    # Initial cell agent will search
-    searching = random.choice(tuples)
+    # # Initial cell agent will search
+    # searching = random.choice(tuples)
+    searching = initialLocation
     
     # Keeping iterating until the target is found and returned
     while targetFound == False:

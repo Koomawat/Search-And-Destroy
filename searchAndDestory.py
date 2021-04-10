@@ -23,9 +23,12 @@ def main():
     improvedAgentBeliefState = agentBoard(25)
 
     # Basic Agent 1/2 searches
-    agent1searches, agent1distance = calculateContainingBelief(mapGrid, agent1BeliefState, targetLocation)
-    agent2searches, agent2distance = calculateFindingBelief(mapGrid, agent2BeliefState, targetLocation)
-    improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, improvedAgentBeliefState, targetLocation)
+    randX = random.randint(0,len(mapGrid)-1)
+    randY = random.randint(0,len(mapGrid)-1)
+    initialLocation = (randX, randY)
+    agent1searches, agent1distance = calculateContainingBelief(mapGrid, agent1BeliefState, targetLocation, initialLocation)
+    agent2searches, agent2distance = calculateFindingBelief(mapGrid, agent2BeliefState, targetLocation, initialLocation)
+    improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, improvedAgentBeliefState, targetLocation, initialLocation)
 
     print("Agent 1 Distance: ", agent1distance)
     print("Agent 1 Searches: ", agent1searches)

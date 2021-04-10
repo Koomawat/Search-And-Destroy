@@ -2,7 +2,7 @@ from mapFunctions import *
 import random
 import numpy as np
 
-def calculateFindingBelief(matrix, beliefState, targetLocation):
+def calculateFindingBelief(matrix, beliefState, targetLocation, initialLocation):
 
     # Belief of a cell -> P(Belief ^ Not False Negative)
 
@@ -40,16 +40,17 @@ def calculateFindingBelief(matrix, beliefState, targetLocation):
     agentsBoard = matrix
     belief = beliefState
 
-    boardDim = len(beliefState)
+    # boardDim = len(beliefState)
 
-    # Calculating initial belief state of agent where each cell has an equal probability
-    for i in range(boardDim):
-        for j in range(boardDim):
-            belief[i,j] = float(1 / (boardDim * boardDim))
-            tuples.append((i,j))
+    # # Calculating initial belief state of agent where each cell has an equal probability
+    # for i in range(boardDim):
+    #     for j in range(boardDim):
+    #         belief[i,j] = float(1 / (boardDim * boardDim))
+    #         tuples.append((i,j))
 
-    # Initial cell agent will search
-    searching = random.choice(tuples)
+    # # Initial cell agent will search
+    # searching = random.choice(tuples)
+    searching = initialLocation
     
     # Keeping iterating until the target is found and returned
     while targetFound == False:
