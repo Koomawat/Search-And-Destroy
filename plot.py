@@ -137,7 +137,7 @@ def plot2():
 
     # 10 different maps
     for i in range(11):
-
+    
         # Set random board each time
         np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
         mapGrid = board(dim)
@@ -161,12 +161,10 @@ def plot2():
 
             # Same belief state for all agents
             beliefState = agentBoard(dim)
-            belief2 = agentBoard(dim)
-            belief3 = agentBoard(dim)
             # Get how many searches and distances 
             agent1searches, agent1distance = calculateContainingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            agent2searches, agent2distance = calculateFindingBelief(mapGrid, belief2, targetLocation, initialLocation)
-            improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, belief3, targetLocation, initialLocation)
+            agent2searches, agent2distance = calculateFindingBelief(mapGrid, beliefState, targetLocation, initialLocation)
+            improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, beliefState, targetLocation, initialLocation)
             
             # Get score and add to score list
             agent1total = agent1searches + agent1distance
@@ -187,7 +185,7 @@ def plot2():
         print(i)
 
     # x-axis labels
-    xax = ["Map"+str(k) for k in range(11)]
+    xax = ["M"+str(k) for k in range(11)]
 
     # Different lines per agent
     plt.plot(xax, agent1_avg_list, label = "Agent 1")
@@ -195,9 +193,9 @@ def plot2():
     plt.plot(xax, improved_avg_list, label = "Improved Agent")
 
     # Axis labeling and other plot display features
-    plt.xlabel('Agent Type')
+    plt.xlabel('Map List')
     plt.ylabel('Score')
-    plt.title(f"Performance Based On Agent Type\nMap dimension: {dim} x {dim}")
+    plt.title(f"Performance of Agents Per Map\nMap dimension: {dim} x {dim}")
     plt.legend(loc = "upper right")
     plt.show()
 
@@ -275,8 +273,8 @@ def plot1():
 def main():
 
     # plot1()
-    plot2()
-    #both()
+    # plot2()
+    both()
 
     return
 
