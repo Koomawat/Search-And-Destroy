@@ -290,3 +290,208 @@ def traversePath(path, main_maze, y, x):
 
 
     return pathList
+
+
+def moveTarget(currentTarget, dim):
+
+    moveChoices = ["U", "D", "L", "R"]
+
+    movement = random.choice(moveChoices)
+
+    nextTarget = currentTarget
+
+    x = currentTarget[0]
+    y = currentTarget[1]
+
+    retry = True
+
+    while retry == True:
+
+        if(movement == "U"):
+            if x-1 >= 0:
+                nextTarget = (x-1, y)
+                retry = False
+            else: 
+                moveChoices.remove("U")
+                movement = random.choice(moveChoices)
+
+        elif (movement == "D"):
+            if x+1 < dim:
+                nextTarget = (x+1, y)
+                retry = False
+            else: 
+                moveChoices.remove("D")
+                movement = random.choice(moveChoices)
+
+        elif (movement == "L"):
+            if y-1 >= 0:
+                nextTarget = (x, y-1)
+                retry = False
+            else: 
+                moveChoices.remove("L")
+                movement = random.choice(moveChoices)
+
+        else:
+            if y+1 < dim:
+                nextTarget = (x, y+1)
+                retry = False
+            else: 
+                moveChoices.remove("R")
+                movement = random.choice(moveChoices)
+
+    return nextTarget
+
+
+def manhattan5Search(belief, currentlyAt):
+
+    manhattanCandidates = []
+    currentX = currentlyAt[0]
+    currentY = currentlyAt[1]
+
+    for i in range(len(belief)):
+        for j in range(len(belief)):
+            
+            distance = abs(currentX - i) + abs(currentY - j)
+
+            if distance <= 5:
+                manhattanCandidates.append((i,j))
+
+    return manhattanCandidates
+
+
+def movementUpdates(belief):
+
+    originalBelief = belief
+
+    lenBelief = len(belief)
+
+    for i in range(lenBelief):
+        for j in range(lenBelief):
+
+            #top left
+            if i == 0 and j == 0:
+
+                belief[i,j] = (originalBelief[0,1] * (1/3)) + (originalBelief[1,0] * (1/3))
+
+            #bot left
+            elif i == lenBelief-1 and j == 0:
+
+                belief[i,j] = (originalBelief[i-1,0] * (1/3)) + (originalBelief[i,j+1] * (1/3))
+
+            #top right
+            elif i == 0 and j == lenBelief-1:
+
+                belief[i,j] = (originalBelief[i,j-1] * (1/3)) + (originalBelief[i+1,j] * (1/3))
+
+            #bot right
+            elif i == lenBelief-1 and j == lenBelief-1:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/3)) + (originalBelief[i,j-1] * (1/3))
+            
+
+            #if (0,len-2)
+            elif i == 0 and j == lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/2)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3))
+
+            #if (0,1)
+            elif i == 0 and j == 1:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/2))
+
+            #if (1,1)
+            elif i == 1 and j == 1:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3)) + (originalBelief[i-1,j] * (1/3))
+
+            #if (1,len-2)
+            elif i == 1 and j == lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3)) + (originalBelief[i-1,j] * (1/3))
+
+
+            #if (1,0)
+            elif i == 1 and j == 0:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/2)) + (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/3))
+
+            #if (len-2,0)
+            elif i == lenBelief-2 and j == 0:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/3)) + (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/2))
+
+            #if (1, len-1)
+            elif i == 1 and j == lenBelief-1:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/2)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i+1,j] * (1/3))
+
+            #if (len-2, len-1)
+            elif i == lenBelief-2 and j == lenBelief-1:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/3)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i+1,j] * (1/2))
+
+            #if (len-1, 1)
+            elif i == lenBelief-1 and j == 1:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/2)) + (originalBelief[i-1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3))
+
+            #if (len-1, len-2)
+            elif i == lenBelief-1 and j == lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i-1,j] * (1/4)) + (originalBelief[i,j-1] * (1/2))
+
+            #if (len-2,1)
+            elif i == lenBelief-2 and j == 1:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/3)) + (originalBelief[i,j-1] * (1/3)) + (originalBelief[i-1,j] * (1/4))
+
+            #if (len-2,len-2)
+            elif i == lenBelief and j == lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i+1,j] * (1/3)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i-1,j] * (1/4))
+
+            #top edge
+            elif i == 0 and j != 0 and j != lenBelief-1 and j != 1 and j != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3))
+
+            #left edge
+            elif i != 0 and i != lenBelief-1 and j == 0 and i != 1 and i != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/3)) + (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/3))
+
+            #right edge
+            elif i != 0 and i != 1 and i != lenBelief-1 and i != lenBelief-2 and j == lenBelief-1 :
+
+                belief[i,j] = (originalBelief[i-1,j] * (1/3)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i+1,j] * (1/3))
+
+            #bot edge
+            elif i == lenBelief-1 and j != 0 and j != 1 and j != lenBelief-1 and j != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i-1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3))
+
+            #if 2nd top row 
+            elif i == 1 and j != 0 and j != 1 and j != lenBelief-1 and j != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i-1,j] * (1/3))
+
+            #if 2nd left col
+            elif j == 1 and i != 0 and i != 1 and i != lenBelief-1 and i != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/3)) + (originalBelief[i-1,j] * (1/4))
+
+            #if 2nd right row 
+            elif j == lenBelief-2 and i != 0 and i != 1 and i != lenBelief-1 and i != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i-1,j] * (1/4))
+
+            #if 2nd bot row 
+            elif i == lenBelief-2 and j != 0 and j != 1 and j != lenBelief-1 and j != lenBelief-2:
+
+                belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/3)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i-1,j] * (1/4))
+
+            else:   
+               
+               belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i+1,j] * (1/4)) + (originalBelief[i-1,j] * (1/4))
+
+    return belief
