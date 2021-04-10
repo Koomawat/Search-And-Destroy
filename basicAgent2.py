@@ -40,7 +40,7 @@ def calculateFindingBelief(matrix, beliefState, targetLocation, initialLocation)
     agentsBoard = matrix
     belief = beliefState
 
-    # boardDim = len(beliefState)
+    boardDim = len(beliefState)
 
     # # Calculating initial belief state of agent where each cell has an equal probability
     # for i in range(boardDim):
