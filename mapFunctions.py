@@ -361,7 +361,7 @@ def manhattan5Search(belief, currentlyAt):
 
 def movementUpdates(belief):
 
-    originalBelief = belief
+    originalBelief = copy.deepcopy(belief)
 
     lenBelief = len(belief)
 
@@ -446,7 +446,7 @@ def movementUpdates(belief):
                 belief[i,j] = (originalBelief[i,j+1] * (1/4)) + (originalBelief[i+1,j] * (1/3)) + (originalBelief[i,j-1] * (1/3)) + (originalBelief[i-1,j] * (1/4))
 
             #if (len-2,len-2)
-            elif i == lenBelief and j == lenBelief-2:
+            elif i == lenBelief-2 and j == lenBelief-2:
 
                 belief[i,j] = (originalBelief[i,j+1] * (1/3)) + (originalBelief[i+1,j] * (1/3)) + (originalBelief[i,j-1] * (1/4)) + (originalBelief[i-1,j] * (1/4))
 

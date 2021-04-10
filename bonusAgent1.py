@@ -1,6 +1,7 @@
 from mapFunctions import *
 import random
 import numpy as np
+import copy
 
 def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
 
@@ -43,6 +44,8 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
     # Initial cell agent will search
     searching = initial
     
+    notTargetCells = []
+
     # Keeping iterating until the target is found and returned
     while targetFound == False:
 
@@ -105,19 +108,20 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
         beliefSum = np.sum(belief)
         belief = belief / beliefSum
 
-        belief = movementUpdates(belief)
+        
 
         if withinFive == True:
 
-            tempBelief = belief
+            tempBelief = copy.deepcopy(belief)
+
+            manhattanCheckSet = set(manhattanCheck)
+            notTargetsSet = set(notTargetCells)
+            possibleValues = manhattanCheckSet - notTargetsSet
 
             for i in range(len(belief)):
                 for j in range(len(belief)):
-                    if (i,j) not in manhattanCheck:
+                    if (i,j) not in possibleValues:
                         tempBelief[i,j] = 0
-
-            tempBeliefSum = np.sum(tempBelief)
-            tempBelief = belief / tempBeliefSum
 
             maxList = largestProbabilities(tempBelief)
 
@@ -146,6 +150,21 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
                 searching = random.choice(uniqueList)
 
         else:
+            
+            for i in range(len(belief)): 
+                for j in range(len(belief)):
+                    if (i,j) in manhattanCheck:
+
+                        if (i,j) not in notTargetCells:
+                            notTargetCells.append((i,j)) 
+
+                            belief[i,j] = 0
+
+            # Normalizing the rest of the belief state
+            beliefSum = np.sum(belief)
+            belief = belief / beliefSum
+
+            belief = movementUpdates(belief)
 
             # Finding the tuples of the largest probabilities 
             maxList = largestProbabilities(belief)
@@ -174,7 +193,5 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
             else:
                 searching = random.choice(uniqueList)
 
-
-        
 
     return observedCount, totalDistance

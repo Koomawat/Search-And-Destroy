@@ -1,6 +1,7 @@
 from mapFunctions import *
 import random
 import numpy as np
+import copy
 
 def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
 
@@ -34,6 +35,9 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
     belief = beliefState
 
     boardDim = len(beliefState)
+
+    notTargetCells = []
+
 
     # Calculating initial belief state of agent where each cell has an equal probability
     for i in range(boardDim):
@@ -101,43 +105,40 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
         # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T))
         belief[searching] = observingBeliefNumerator / observingBeliefDenominator
 
-        # Normalizing the rest of the belief state
-        beliefSum = np.sum(belief)
-        belief = belief / beliefSum
 
          # Iterating every cell in the belief state and accounting for the false negatives of the terrain
+        
         for i in range (boardDim):
-            for j in range(boardDim):
-                    
-                if currentTerrain == "f":
-                    falseNegative = 0.1
-                elif currentTerrain == "H":
-                    falseNegative = 0.3
-                elif currentTerrain == "F":
-                    falseNegative = 0.7
-                elif currentTerrain == "C":
-                    falseNegative = 0.9
+                for j in range(boardDim):
+                        
+                    if currentTerrain == "f":
+                        falseNegative = 0.1
+                    elif currentTerrain == "H":
+                        falseNegative = 0.3
+                    elif currentTerrain == "F":
+                        falseNegative = 0.7
+                    elif currentTerrain == "C":
+                        falseNegative = 0.9
 
-                belief[(i,j)] = (belief[(i,j)] * (1 - falseNegative))
+                    belief[(i,j)] = (belief[(i,j)] * (1 - falseNegative))
 
 
-        # Normalizing the rest of the belief state again 
+            # Normalizing the rest of the belief state again 
         beliefSum = np.sum(belief)
         belief = belief / beliefSum
-
-        belief = movementUpdates(belief)
 
         if withinFive == True:   
 
-            tempBelief = belief
+            tempBelief = copy.deepcopy(belief)
+
+            manhattanCheckSet = set(manhattanCheck)
+            notTargetsSet = set(notTargetCells)
+            possibleValues = manhattanCheckSet - notTargetsSet
 
             for i in range(len(belief)):
                 for j in range(len(belief)):
-                    if (i,j) not in manhattanCheck:
+                    if (i,j) not in possibleValues:
                         tempBelief[i,j] = 0
-
-            tempBeliefSum = np.sum(tempBelief)
-            tempBelief = belief / tempBeliefSum
 
             maxList = largestProbabilities(tempBelief)
 
@@ -167,6 +168,23 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
 
         else:
 
+            if withinFive == False:
+
+                for i in range(len(belief)): 
+                    for j in range(len(belief)):
+                        if (i,j) in manhattanCheck:
+
+                            if (i,j) not in notTargetCells:
+                                notTargetCells.append((i,j)) 
+
+                                belief[i,j] = 0
+
+            # Normalizing the rest of the belief state again 
+            beliefSum = np.sum(belief)
+            belief = belief / beliefSum
+
+            belief = movementUpdates(belief)
+
             # Finding the tuples of the largest probabilities 
             maxList = largestProbabilities(belief)
 
@@ -194,7 +212,5 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
             else:
                 searching = random.choice(uniqueList)
 
-
-        
 
     return observedCount, totalDistance
