@@ -5,6 +5,7 @@ from improvedAgent import *
 from printMap import *
 import sys
 from matplotlib import pyplot as plt
+import concurrent.futures
 
 # Plot both types of data analysis on subplots
 def both():
@@ -13,7 +14,6 @@ def both():
     dim = int(input("Enter the dimension of the map: "))
 
     # Empty lists for later to append on averages for each map traversed by different agents
-    mapType_list = []
     avg_list = []
     agent1_avg_list, agent2_avg_list, improved_avg_list = [], [], []
 
@@ -45,9 +45,21 @@ def both():
             # Same belief state for all agents
             beliefState = agentBoard(dim)
             # Get how many searches and distances 
-            agent1searches, agent1distance = calculateContainingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            agent2searches, agent2distance = calculateFindingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, beliefState, targetLocation, initialLocation)
+
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                f1 = executor.submit(calculateContainingBelief, mapGrid, beliefState, targetLocation, initialLocation)
+                f2 = executor.submit(calculateFindingBelief, mapGrid, beliefState, targetLocation, initialLocation)
+                f3 = executor.submit(calculateImprovedBelief, mapGrid, beliefState, targetLocation, initialLocation)
+
+            agent1searches = f1.result()[0]
+            agent1distance = f1.result()[1]
+
+            agent2searches = f2.result()[0]
+            agent2distance = f2.result()[1]
+
+            improvedSearches = f3.result()[0]
+            improvedDistance = f3.result()[1]
 
             # Get score
             agent1total = agent1searches + agent1distance
@@ -124,7 +136,7 @@ def plot2():
     agent1_avg_list, agent2_avg_list, improved_avg_list = [], [], []
 
     # 10 different maps
-    for i in range(11):
+    for i in range(2):
 
         # Set random board each time
         np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
@@ -135,7 +147,7 @@ def plot2():
         agent1_total_list, agent2_total_list, improved_total_list = [], [], []
 
         # 10 different runthrough with different target and initial location each time
-        for j in range(11):
+        for j in range(2):
 
             # Random target location
             randX = random.randint(0,dim-1)
@@ -149,10 +161,12 @@ def plot2():
 
             # Same belief state for all agents
             beliefState = agentBoard(dim)
+            belief2 = agentBoard(dim)
+            belief3 = agentBoard(dim)
             # Get how many searches and distances 
             agent1searches, agent1distance = calculateContainingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            agent2searches, agent2distance = calculateFindingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, beliefState, targetLocation, initialLocation)
+            agent2searches, agent2distance = calculateFindingBelief(mapGrid, belief2, targetLocation, initialLocation)
+            improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, belief3, targetLocation, initialLocation)
             
             # Get score and add to score list
             agent1total = agent1searches + agent1distance
@@ -164,16 +178,16 @@ def plot2():
             print(j)
 
         # For each agent, take an average per map
-        agent1avg = sum(agent1_total_list) / 10
-        agent2avg = sum(agent2_total_list) / 10
-        improvedAvg = sum(improved_total_list) / 10
+        agent1avg = sum(agent1_total_list) / 1
+        agent2avg = sum(agent2_total_list) / 1
+        improvedAvg = sum(improved_total_list) / 1
         agent1_avg_list.append(agent1avg)
         agent2_avg_list.append(agent2avg)
         improved_avg_list.append(improvedAvg)
         print(i)
 
     # x-axis labels
-    xax = ["M"+str(k) for k in range(11)]
+    xax = ["Map"+str(k) for k in range(2)]
 
     # Different lines per agent
     plt.plot(xax, agent1_avg_list, label = "Agent 1")
@@ -181,9 +195,9 @@ def plot2():
     plt.plot(xax, improved_avg_list, label = "Improved Agent")
 
     # Axis labeling and other plot display features
-    plt.xlabel('Map List')
+    plt.xlabel('Agent Type')
     plt.ylabel('Score')
-    plt.title(f"Performance of Agents Per Map\nMap dimension: {dim} x {dim}")
+    plt.title(f"Performance Based On Agent Type\nMap dimension: {dim} x {dim}")
     plt.legend(loc = "upper right")
     plt.show()
 
@@ -261,8 +275,8 @@ def plot1():
 def main():
 
     # plot1()
-    # plot2()
-    both()
+    plot2()
+    #both()
 
     return
 
