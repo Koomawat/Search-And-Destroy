@@ -136,7 +136,7 @@ def plot2():
     agent1_avg_list, agent2_avg_list, improved_avg_list = [], [], []
 
     # 10 different maps
-    for i in range(2):
+    for i in range(11):
 
         # Set random board each time
         np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
@@ -147,7 +147,7 @@ def plot2():
         agent1_total_list, agent2_total_list, improved_total_list = [], [], []
 
         # 10 different runthrough with different target and initial location each time
-        for j in range(2):
+        for j in range(11):
 
             # Random target location
             randX = random.randint(0,dim-1)
@@ -178,16 +178,16 @@ def plot2():
             print(j)
 
         # For each agent, take an average per map
-        agent1avg = sum(agent1_total_list) / 1
-        agent2avg = sum(agent2_total_list) / 1
-        improvedAvg = sum(improved_total_list) / 1
+        agent1avg = sum(agent1_total_list) / 10
+        agent2avg = sum(agent2_total_list) / 10
+        improvedAvg = sum(improved_total_list) / 10
         agent1_avg_list.append(agent1avg)
         agent2_avg_list.append(agent2avg)
         improved_avg_list.append(improvedAvg)
         print(i)
 
     # x-axis labels
-    xax = ["Map"+str(k) for k in range(2)]
+    xax = ["Map"+str(k) for k in range(11)]
 
     # Different lines per agent
     plt.plot(xax, agent1_avg_list, label = "Agent 1")
