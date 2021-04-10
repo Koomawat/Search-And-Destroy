@@ -42,11 +42,11 @@ def calculateFindingBelief(matrix, beliefState, targetLocation, initialLocation)
 
     boardDim = len(beliefState)
 
-    # # Calculating initial belief state of agent where each cell has an equal probability
-    # for i in range(boardDim):
-    #     for j in range(boardDim):
-    #         belief[i,j] = float(1 / (boardDim * boardDim))
-    #         tuples.append((i,j))
+    # Calculating initial belief state of agent where each cell has an equal probability
+    for i in range(boardDim):
+        for j in range(boardDim):
+            belief[i,j] = float(1 / (boardDim * boardDim))
+            tuples.append((i,j))
 
     # # Initial cell agent will search
     # searching = random.choice(tuples)

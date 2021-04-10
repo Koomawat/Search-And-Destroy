@@ -23,7 +23,7 @@ def calculateContainingBelief(matrix, beliefState, targetLocation, initialLocati
 
 
     # # Unvisited list to keep track of which spots on the map are searching candidates
-    # tuples = []
+    tuples = []
 
     # Counter to keep track of total distance agent travels
     totalDistance = 0
@@ -37,13 +37,13 @@ def calculateContainingBelief(matrix, beliefState, targetLocation, initialLocati
     agentsBoard = matrix
     belief = beliefState
 
-    # boardDim = len(beliefState)
+    boardDim = len(beliefState)
 
-    # # Calculating initial belief state of agent where each cell has an equal probability
-    # for i in range(boardDim):
-    #     for j in range(boardDim):
-    #         belief[i,j] = float(1 / (boardDim * boardDim))
-    #         tuples.append((i,j))
+    # Calculating initial belief state of agent where each cell has an equal probability
+    for i in range(boardDim):
+        for j in range(boardDim):
+            belief[i,j] = float(1 / (boardDim * boardDim))
+            tuples.append((i,j))
 
     # # Initial cell agent will search
     # searching = random.choice(tuples)
