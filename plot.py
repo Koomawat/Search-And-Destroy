@@ -12,14 +12,14 @@ def plot():
 
     avg_list = []
 
-    for i in range(1):
+    for i in range(11):
         np.set_printoptions(threshold=sys.maxsize, linewidth=np.inf)
         mapGrid = board(dim)
         mapGrid, _ = makeTerrain(mapGrid)
 
         total_list = []
 
-        for j in range(1):
+        for j in range(11):
             randX = random.randint(0,dim-1)
             randY = random.randint(0,dim-1)
             targetLocation = (randX, randY)
@@ -29,29 +29,25 @@ def plot():
             initialLocation = (randX, randY)
 
             beliefState = agentBoard(dim)
-            print('asdf1')
             agent1searches, agent1distance = calculateContainingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            print('asdf2')
             agent2searches, agent2distance = calculateFindingBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            print('asdf3')
             improvedSearches, improvedDistance = calculateImprovedBelief(mapGrid, beliefState, targetLocation, initialLocation)
-            print('asdf4')
-
+            
             agent1total = agent1searches + agent1distance
             agent2total = agent2searches + agent2distance
             improvedTotal = improvedSearches + improvedDistance
 
             totalPerRun = [agent1total, agent2total, improvedTotal]
+            print(totalPerRun)
             total_list.append(totalPerRun)
-            print('asdf')
 
-        print(total_list)
         avgPerMap_sum = [sum(k) for k in zip(*total_list)]
         avgPerMap = [k / 10 for k in avgPerMap_sum]
         avg_list.append(avgPerMap)
 
     xax = ["Agent 1", "Agent 2", "Improved Agent"]
 
+    print(avg_list)
     overallAvg_sum = [sum(k) for k in zip(*avg_list)]
     overallAvg = [k / 10 for k in overallAvg_sum]
     
