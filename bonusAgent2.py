@@ -144,6 +144,12 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
                     if (i,j) not in manhattanCheckSet:
                        belief[i,j] = 0
             
+            targetLocation = moveTarget(targetLocation, dimBoard)
+            belief = movementUpdates(belief)
+            # Normalizing the rest of the belief state
+            beliefSum = np.sum(belief)
+            belief = belief / beliefSum
+
             maxList = largestProbabilities(belief)
 
             uniqueTargets = []
@@ -185,6 +191,12 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
                     if (i,j) in manhattanCheckSet:
                         belief[i,j] = 0
 
+            targetLocation = moveTarget(targetLocation, dimBoard)
+            belief = movementUpdates(belief)
+            # Normalizing the rest of the belief state
+            beliefSum = np.sum(belief)
+            belief = belief / beliefSum
+
             # Finding the tuples of the largest probabilities 
             maxList = largestProbabilities(belief)
 
@@ -215,10 +227,5 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
                 searching = random.choice(uniqueList)
 
 
-        targetLocation = moveTarget(targetLocation, dimBoard)
-        belief = movementUpdates(belief)
-        # Normalizing the rest of the belief state
-        beliefSum = np.sum(belief)
-        belief = belief / beliefSum
 
     return observedCount, totalDistance
