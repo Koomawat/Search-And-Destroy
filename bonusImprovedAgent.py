@@ -87,7 +87,7 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
         dimBoard = len(belief)
 
         
-
+        #Check for whether or not the target is within mahanttan distance 5
         withinFive = False
 
         manhattanCheck = manhattan5Search(belief, searching)
