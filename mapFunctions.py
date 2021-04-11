@@ -129,7 +129,7 @@ def minManhattanDistance(tuples, current):
 
     return goalList, currMin
 
-
+# bfs algorithm function (taken from FireMaze project)
 def bfs(main_maze, start, goal, mlen):
 
     maze = copy.deepcopy(main_maze)
@@ -167,7 +167,7 @@ def bfs(main_maze, start, goal, mlen):
     # if no path is found
     return "No such path from S to G exists" #, int(len(visited)) # for number of nodes explored by BFS
 
-
+# array to tree function (taken from FireMaze project)
 def arrayToTree(maze):
     
     # Converting a 2D numpy matrix into a "tree" like structure in using dictionaries
@@ -185,7 +185,7 @@ def arrayToTree(maze):
     
     return setNeighbors(tree,maze)
 
-
+# set neighbors function (taken from FireMaze project)
 def setNeighbors(tree,maze):
 
     dim = len(maze)
@@ -255,7 +255,7 @@ def setNeighbors(tree,maze):
 
     return tree
 
-
+# traverse path function (taken from FireMaze project)
 def traversePath(path, main_maze, y, x): 
     
     maze = copy.deepcopy(main_maze)
@@ -291,9 +291,10 @@ def traversePath(path, main_maze, y, x):
 
     return pathList
 
-
+# function to move the target in a random direction
 def moveTarget(currentTarget, dim):
 
+    # directions are up, down, left, right
     moveChoices = ["U", "D", "L", "R"]
 
     movement = random.choice(moveChoices)
@@ -341,7 +342,7 @@ def moveTarget(currentTarget, dim):
 
     return nextTarget
 
-
+# manhattan distance 5 search
 def manhattan5Search(belief, currentlyAt):
 
     manhattanCandidates = []
@@ -358,6 +359,7 @@ def manhattan5Search(belief, currentlyAt):
 
     return manhattanCandidates
 
+# manhattan distance 6 search
 def manhattan6Search(belief, currentlyAt):
 
     manhattanCandidates = []
@@ -374,6 +376,7 @@ def manhattan6Search(belief, currentlyAt):
 
     return manhattanCandidates
 
+# manhattan distance 4 search
 def manhattan4Search(belief, currentlyAt):
 
     manhattanCandidates = []
@@ -390,6 +393,7 @@ def manhattan4Search(belief, currentlyAt):
 
     return manhattanCandidates
 
+# movement function to update belief state of an agent to account for the target moving 
 def movementUpdates(belief):
 
     originalBelief = copy.deepcopy(belief)

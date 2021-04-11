@@ -123,7 +123,9 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
                     if (i,j) not in manhattanCheckSet:
                        belief[i,j] = 0
 
+            # Next target location
             targetLocation = moveTarget(targetLocation, dimBoard)
+            # Belief update to account for movement
             belief = movementUpdates(belief)
             # Normalizing the rest of the belief state
             beliefSum = np.sum(belief)
@@ -172,7 +174,9 @@ def bonusContainingBelief(matrix, beliefState, targetLocation, initial):
                     if (i,j) in manhattanCheckSet:
                         belief[i,j] = 0
 
+            # Next target location
             targetLocation = moveTarget(targetLocation, dimBoard)
+            # Belief update to account for movement
             belief = movementUpdates(belief)
             # Normalizing the rest of the belief state
             beliefSum = np.sum(belief)
