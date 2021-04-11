@@ -49,6 +49,8 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
     # Keeping iterating until the target is found and returned
     while targetFound == False:
 
+        belief = np.nan_to_num(belief) 
+
         # Keeping track of previous belief, used for updating later
         previousBeliefs = belief
 
@@ -84,11 +86,13 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
 
         dimBoard = len(belief)
 
-        targetLocation = moveTarget(targetLocation, dimBoard)
+        
 
         withinFive = False
 
         manhattanCheck = manhattan5Search(belief, searching)
+        manhattan4Check = manhattan4Search(belief, searching)
+        manhattan6Check = manhattan6Search(belief, searching)
 
         if(targetLocation in manhattanCheck):
 
@@ -110,18 +114,19 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
 
         if withinFive == True:
 
-            tempBelief = copy.deepcopy(belief)
+            manhattanCheckSet = set(manhattan6Check)
+
+
             
-            manhattanCheckSet = set(manhattanCheck)
-            notTargetsSet = set(notTargetCells)
-            possibleValues = manhattanCheckSet - notTargetsSet
+            tempBelief = copy.deepcopy(belief)
 
             for i in range(len(belief)):
                 for j in range(len(belief)):
-                    if (i,j) not in possibleValues:
-                        tempBelief[i,j] = 0
+                    if (i,j) not in manhattanCheckSet:
+                       belief[i,j] = 0
+            
 
-            maxList = largestProbabilities(tempBelief)
+            maxList = largestProbabilities(belief)
 
             uniqueTargets = []
 
@@ -147,24 +152,22 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
             else:
                 searching = random.choice(uniqueList)
 
+
+
         else:
-
-            if withinFive == False:
-
-                for i in range(len(belief)): 
-                    for j in range(len(belief)):
-                        if (i,j) in manhattanCheck:
-
-                            if (i,j) not in notTargetCells:
-                                notTargetCells.append((i,j)) 
-
-                                belief[i,j] = 0
 
             # Normalizing the rest of the belief state
             beliefSum = np.sum(belief)
             belief = belief / beliefSum
 
-            belief = movementUpdates(belief)
+            manhattanCheckSet = set(manhattan4Check)
+
+            tempBelief = copy.deepcopy(belief)
+
+            for i in range(len(belief)):
+                for j in range(len(belief)):
+                    if (i,j) in manhattanCheckSet:
+                        belief[i,j] = 0
 
             # Finding the tuples of the largest probabilities 
             maxList = largestProbabilities(belief)
@@ -218,6 +221,11 @@ def bonusImprovedBelief(matrix, beliefState, targetLocation, initial):
                 else:
 
                     observedCount += 1
-            
+
+        targetLocation = moveTarget(targetLocation, dimBoard)
+        belief = movementUpdates(belief)
+        # Normalizing the rest of the belief state
+        beliefSum = np.sum(belief)
+        belief = belief / beliefSum
 
     return observedCount, totalDistance

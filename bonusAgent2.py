@@ -50,6 +50,8 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
     # Keeping iterating until the target is found and returned
     while targetFound == False:
 
+        belief = np.nan_to_num(belief) 
+
         # Keeping track of previous belief, used for updating later
         previousBeliefs = belief
 
@@ -85,11 +87,12 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
 
         dimBoard = len(belief)
 
-        targetLocation = moveTarget(targetLocation, dimBoard)
 
         withinFive = False
 
         manhattanCheck = manhattan5Search(belief, searching)
+        manhattan4Check = manhattan4Search(belief, searching)
+        manhattan6Check = manhattan6Search(belief, searching)
 
         if(targetLocation in manhattanCheck):
 
@@ -105,6 +108,9 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
         # (P(Cell x = T) P(Cell y = F | Cell x = T)) / (P(Cell x = F) + P(Cell x = T) P(Cell y = F | Cell x = T))
         belief[searching] = observingBeliefNumerator / observingBeliefDenominator
 
+        # Normalizing the rest of the belief state
+        beliefSum = np.sum(belief)
+        belief = belief / beliefSum
 
          # Iterating every cell in the belief state and accounting for the false negatives of the terrain
         
@@ -129,18 +135,16 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
 
         if withinFive == True:   
 
-            tempBelief = copy.deepcopy(belief)
+            manhattanCheckSet = set(manhattan6Check)
 
-            manhattanCheckSet = set(manhattanCheck)
-            notTargetsSet = set(notTargetCells)
-            possibleValues = manhattanCheckSet - notTargetsSet
+            tempBelief = copy.deepcopy(belief)
 
             for i in range(len(belief)):
                 for j in range(len(belief)):
-                    if (i,j) not in possibleValues:
-                        tempBelief[i,j] = 0
-
-            maxList = largestProbabilities(tempBelief)
+                    if (i,j) not in manhattanCheckSet:
+                       belief[i,j] = 0
+            
+            maxList = largestProbabilities(belief)
 
             uniqueTargets = []
 
@@ -168,22 +172,18 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
 
         else:
 
-            if withinFive == False:
-
-                for i in range(len(belief)): 
-                    for j in range(len(belief)):
-                        if (i,j) in manhattanCheck:
-
-                            if (i,j) not in notTargetCells:
-                                notTargetCells.append((i,j)) 
-
-                                belief[i,j] = 0
-
-            # Normalizing the rest of the belief state again 
+             # Normalizing the rest of the belief state
             beliefSum = np.sum(belief)
             belief = belief / beliefSum
 
-            belief = movementUpdates(belief)
+            manhattanCheckSet = set(manhattan4Check)
+
+            tempBelief = copy.deepcopy(belief)
+
+            for i in range(len(belief)):
+                for j in range(len(belief)):
+                    if (i,j) in manhattanCheckSet:
+                        belief[i,j] = 0
 
             # Finding the tuples of the largest probabilities 
             maxList = largestProbabilities(belief)
@@ -194,6 +194,8 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
             for i in maxList:
                 if i not in uniqueTargets:
                     uniqueTargets.append(i)
+
+            previousSearch = searching
 
             # Seeking the next target to search and calculating the cost to do so
             nextTarget, distanceCost = minManhattanDistance(uniqueTargets, searching)
@@ -212,5 +214,11 @@ def bonusFindingBelief(matrix, beliefState, targetLocation, initial):
             else:
                 searching = random.choice(uniqueList)
 
+
+        targetLocation = moveTarget(targetLocation, dimBoard)
+        belief = movementUpdates(belief)
+        # Normalizing the rest of the belief state
+        beliefSum = np.sum(belief)
+        belief = belief / beliefSum
 
     return observedCount, totalDistance

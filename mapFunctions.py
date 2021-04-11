@@ -358,6 +358,37 @@ def manhattan5Search(belief, currentlyAt):
 
     return manhattanCandidates
 
+def manhattan6Search(belief, currentlyAt):
+
+    manhattanCandidates = []
+    currentX = currentlyAt[0]
+    currentY = currentlyAt[1]
+
+    for i in range(len(belief)):
+        for j in range(len(belief)):
+            
+            distance = abs(currentX - i) + abs(currentY - j)
+
+            if distance <= 6:
+                manhattanCandidates.append((i,j))
+
+    return manhattanCandidates
+
+def manhattan4Search(belief, currentlyAt):
+
+    manhattanCandidates = []
+    currentX = currentlyAt[0]
+    currentY = currentlyAt[1]
+
+    for i in range(len(belief)):
+        for j in range(len(belief)):
+            
+            distance = abs(currentX - i) + abs(currentY - j)
+
+            if distance <= 4:
+                manhattanCandidates.append((i,j))
+
+    return manhattanCandidates
 
 def movementUpdates(belief):
 
